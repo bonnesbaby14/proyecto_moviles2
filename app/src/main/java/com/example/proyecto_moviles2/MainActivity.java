@@ -4,9 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +32,17 @@ public class MainActivity extends AppCompatActivity {
 
         TextView txt_login=findViewById(R.id.txt_login);
         Button btn_login=findViewById(R.id.btnLogin);
+
+
+
+
+        int permissioncheck=ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if(permissioncheck== PackageManager.PERMISSION_DENIED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
+        }else{
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        }
 
         androidx.biometric.BiometricManager biometricManager= androidx.biometric.BiometricManager.from(this);
 
@@ -67,7 +84,10 @@ public class MainActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                biometricPrompt.authenticate(promptInfo);
+
+                LocationManager locationManager=(LocationManager) MainActivity.this.getSystemService(Context.LOCATION_SERVICE);
+
+                //biometricPrompt.authenticate(promptInfo);
             }
         });
     }
