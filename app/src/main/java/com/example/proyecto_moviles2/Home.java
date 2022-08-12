@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -30,6 +31,7 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         ScrollView scrollView=findViewById(R.id.scroll);
+        Button button =findViewById(R.id.nuevo);
 
         LinearLayout linearLayout=new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -40,6 +42,11 @@ public class Home extends AppCompatActivity {
         linearLayout.addView(cards("hola","dos","wss",4));
         linearLayout.addView(cards("hola","dos","wss",5));
         linearLayout.addView(cards("hola","dos","wss",6));
+        linearLayout.addView(cards("hola","dos","wss",7));
+        linearLayout.addView(cards("hola","dos","wss",8));
+        linearLayout.addView(cards("hola","dos","wss",9));
+        linearLayout.addView(cards("hola","dos","wss",10));
+        linearLayout.addView(cards("hola","dos","wss",11));
 
         scrollView.addView(linearLayout);
 
@@ -89,6 +96,15 @@ public class Home extends AppCompatActivity {
         //vea
         //lo rika k tu esta
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, AddPackage.class);
+
+
+                startActivity(intent);
+            }
+        });
 
     }
 

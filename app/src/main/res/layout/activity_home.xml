@@ -10,11 +10,13 @@
     android:gravity="center"
     tools:context=".Home">
 
+
+
     <ImageView
         android:layout_width="70dp"
         android:layout_height="62dp"
         android:src="@drawable/ic_baseline_cloud_24"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="5dp"
 
         ></ImageView>
     <TextView
@@ -27,11 +29,18 @@
 
     <ScrollView
         android:id="@+id/scroll"
-        android:layout_width="wrap_content"
-        android:layout_height="700dp">
+        android:layout_width="254dp"
+        android:layout_height="202dp">
 
 
     </ScrollView>
+
+    <Button
+        android:layout_width="162dp"
+        android:layout_height="68dp"
+        android:text="new"
+        android:id="@+id/nuevo"
+        android:textColor="#FFFF"></Button>
 
 
 </LinearLayout>
