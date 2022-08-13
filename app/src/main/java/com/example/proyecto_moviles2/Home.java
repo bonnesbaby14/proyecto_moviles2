@@ -59,7 +59,7 @@ public class Home extends AppCompatActivity {
 
 
 
-        String url="http://api.weatherstack.com/current?access_key=3c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
+        String url="http://api.weatherstack.com/current?access_key=3 c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
 
         StringRequest postRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
