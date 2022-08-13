@@ -63,8 +63,8 @@ public class AddPackage extends AppCompatActivity {
         Button getCordenadas = findViewById(R.id.getcord);
 
         imagen = findViewById(R.id.imageTomar);
-        Button enviar=findViewById(R.id.enviar);
-        fotoname="";
+        Button enviar = findViewById(R.id.enviar);
+        fotoname = "";
 
 
         Log.d("gabo", "cargue el intent ");
@@ -85,14 +85,14 @@ public class AddPackage extends AppCompatActivity {
 
 
                         // on below line we are displaying a success toast message.
-                        Toast.makeText(AddPackage.this, "Data added to API", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPackage.this, "Datos enviados al servidor", Toast.LENGTH_SHORT).show();
 
                     }
                 }, new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // method to handle errors.
-                        Toast.makeText(AddPackage.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPackage.this, "Error con api = " + error, Toast.LENGTH_SHORT).show();
                     }
                 }) {
                     @Override
@@ -102,11 +102,10 @@ public class AddPackage extends AppCompatActivity {
                         Map<String, String> params = new HashMap<String, String>();
 
 
-
                         params.put("codigo", codigo.getText().toString());
                         params.put("foto", fotoname);
-                        params.put("cordenadas",cordenadas.getText().toString());
-                        params.put("descripcion",descripcion.getText().toString());
+                        params.put("cordenadas", cordenadas.getText().toString());
+                        params.put("descripcion", descripcion.getText().toString());
 
 
                         // at last we are
@@ -171,7 +170,7 @@ public class AddPackage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && data != null) {
-             bitmap = (Bitmap) data.getExtras().get("data");
+            bitmap = (Bitmap) data.getExtras().get("data");
             int ancho = 500;
             int alto = 500;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ancho, alto);
@@ -206,7 +205,7 @@ public class AddPackage extends AppCompatActivity {
 
     public void guardarFoto(Bitmap bitmap) {
         OutputStream outputStream = null;
-        File file=null;
+        File file = null;
 
         ContentResolver contentResolver = getContentResolver();
         ContentValues contentValues = new ContentValues();
@@ -215,7 +214,7 @@ public class AddPackage extends AppCompatActivity {
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/proyecto_mobiles");
         contentValues.put(MediaStore.Images.Media.IS_PENDING, 1);
-        fotoname="Pictures/proyecto_mobiles/"+filename+".jpg";
+        fotoname = "Pictures/proyecto_mobiles/" + filename + ".jpg";
         Uri colection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         Uri imageuri = contentResolver.insert(colection, contentValues);
         Log.d("gabo", "llegue aqui");
@@ -243,10 +242,10 @@ public class AddPackage extends AppCompatActivity {
 
 
         }
-        if(file!=null) {
+        if (file != null) {
 
             MediaScannerConnection.scanFile(this,
-                    new String[] {file.toString()}, null,
+                    new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri_local) {
                             Log.i("gabo", "Scanned " + path + ":");
@@ -254,6 +253,6 @@ public class AddPackage extends AppCompatActivity {
                         }
                     });
         }
-        }
+    }
 
 }

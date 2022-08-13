@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,17 +37,8 @@ public class Home extends AppCompatActivity {
         LinearLayout linearLayout=new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        linearLayout.addView(cards("hola","dos","wss",1));
-        linearLayout.addView(cards("hola","dos","wss",2));
-        linearLayout.addView(cards("hola","dos","wss",3));
-        linearLayout.addView(cards("hola","dos","wss",4));
-        linearLayout.addView(cards("hola","dos","wss",5));
-        linearLayout.addView(cards("hola","dos","wss",6));
-        linearLayout.addView(cards("hola","dos","wss",7));
-        linearLayout.addView(cards("hola","dos","wss",8));
-        linearLayout.addView(cards("hola","dos","wss",9));
-        linearLayout.addView(cards("hola","dos","wss",10));
-        linearLayout.addView(cards("hola","dos","wss",11));
+
+
 
         scrollView.addView(linearLayout);
 
@@ -60,6 +52,7 @@ public class Home extends AppCompatActivity {
 
 
         String url="http://api.weatherstack.com/current?access_key=3 c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
+        String url2="https://ventanilla.softwaredatab.com/api/gabo";
 
         StringRequest postRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -90,6 +83,43 @@ public class Home extends AppCompatActivity {
             }
         });
         Volley.newRequestQueue(Home.this).add(postRequest);
+
+        StringRequest postRequest2=new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    //TU eres BEBESITA eres BEBESOTAAAA
+                    //Mami sube algo
+                    //dame contenido
+                    //ese CULO
+                    //sube
+                    JSONObject jsonObject=new JSONObject(response);
+                    JSONArray jsonObjec2=new JSONArray(jsonObject.getString("entregas"));
+                    for (int i = 0; i < jsonObjec2.length(); i++) {
+                        JSONObject obj = jsonObjec2.getJSONObject(i);
+                        linearLayout.addView(cards(obj.getString("codigo"),obj.getString("cordenadas"),obj.getString("descripcion"),obj.getInt("identrega")));
+
+                    }
+
+
+                        //  txt_login.setText(jsonObjec2.getString("temperature"));
+                    Log.d("gabo", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("gabo","error en segunda peticion"+ e.toString());
+                    // txt_login.setText("no se puedo");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("gabo", error.toString());
+            }
+        });
+        Volley.newRequestQueue(Home.this).add(postRequest2);
         //lo mas seguido
         //pa que to
         //el mundo
@@ -108,13 +138,13 @@ public class Home extends AppCompatActivity {
 
     }
 
-    private CardView cards(String uno, String dos, String tres,int id){
+    private CardView cards(String codigo, String cordenada, String descripcion,int id){
         TextView item =new TextView(this);
-        item.setText("holiiii");
+        item.setText(codigo);
         item.setPadding(15,15,15,15);
 
         TextView item2 =new TextView(this);
-        item2.setText("holiiii12");
+        item2.setText(cordenada);
         item2.setPadding(15,15,15,15);
 
         CardView card=new CardView(this);
