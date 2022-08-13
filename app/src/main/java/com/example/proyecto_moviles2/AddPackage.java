@@ -217,7 +217,7 @@ public class AddPackage extends AppCompatActivity {
         fotoname = "Pictures/proyecto_mobiles/" + filename + ".jpg";
         Uri colection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         Uri imageuri = contentResolver.insert(colection, contentValues);
-        Log.d("gabo", "llegue aqui");
+        Log.d("gabo", "uri de imagen "+imageuri.toString());
         try {
             outputStream = contentResolver.openOutputStream(imageuri);
         } catch (Exception e) {
