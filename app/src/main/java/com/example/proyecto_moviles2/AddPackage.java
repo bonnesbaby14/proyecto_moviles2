@@ -2,11 +2,18 @@ package com.example.proyecto_moviles2;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,6 +26,7 @@ import android.location.LocationManager;
 
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -36,6 +44,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -70,6 +79,7 @@ public class AddPackage extends AppCompatActivity {
         Log.d("gabo", "cargue el intent ");
 
         enviar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 guardarFoto(bitmap);
@@ -83,9 +93,19 @@ public class AddPackage extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
+try {
+    JSONObject jsonObject = new JSONObject(response);
+    JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("entrega"));
 
-                        // on below line we are displaying a success toast message.
-                        Toast.makeText(AddPackage.this, "Datos enviados al servidor", Toast.LENGTH_SHORT).show();
+    notificaacion(jsonObjec2.getInt("identrega"));
+
+    Toast.makeText(AddPackage.this, "Datos enviados al servidor", Toast.LENGTH_SHORT).show();
+
+}catch (JSONException e){
+
+}
+
+
 
                     }
                 }, new com.android.volley.Response.ErrorListener() {
@@ -253,6 +273,32 @@ public class AddPackage extends AppCompatActivity {
                         }
                     });
         }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void notificaacion(int id ){
+
+        Intent intent = new Intent(AddPackage.this, PackageDetail.class);
+
+        Bundle parmetros = new Bundle();
+        parmetros.putInt("id", id);
+        intent.putExtras(parmetros);
+        TaskStackBuilder builder2=TaskStackBuilder.create(this);
+        builder2.addParentStack(PackageDetail.class);
+        builder2.addNextIntent(intent);
+        PendingIntent pendingIntent=    builder2.getPendingIntent(1,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationChannel notificationChannel=new NotificationChannel("canal","nuevo", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(notificationChannel);
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext(),"canal")
+                .setSmallIcon(R.drawable.ic_baseline_add_24)
+                .setContentTitle("Nuevo paquete entregado")
+                .setContentText("entregaste un nuevo paquete clic para verlo")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        NotificationManagerCompat managerCompat=NotificationManagerCompat.from(getApplicationContext());
+        managerCompat.notify(1,builder.build());
+
     }
 
 }

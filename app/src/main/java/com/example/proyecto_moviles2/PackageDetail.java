@@ -2,9 +2,14 @@ package com.example.proyecto_moviles2;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.loader.content.CursorLoader;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -32,6 +37,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
+import javax.net.ssl.ManagerFactoryParameters;
+
 public class PackageDetail extends AppCompatActivity {
     File file;
 
@@ -40,16 +47,14 @@ public class PackageDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package_detail);
 
-        TextView code=findViewById(R.id.code);
-        TextView cordenadas=findViewById(R.id.cordenadas);
-        TextView decripcin=findViewById(R.id.descripcion);
-        ImageView imageView=findViewById(R.id.image);
+        TextView code = findViewById(R.id.code);
+        TextView cordenadas = findViewById(R.id.cordenadas);
+        TextView decripcin = findViewById(R.id.descripcion);
+        ImageView imageView = findViewById(R.id.image);
 
 
-
-
-        Log.d("gabo", "llego el intent el code:  "+getIntent().getExtras().getInt("id"));
-        String url = "https://ventanilla.softwaredatab.com/api/gabo/"+getIntent().getExtras().getInt("id");
+        Log.d("gabo", "llego el intent el code:  " + getIntent().getExtras().getInt("id"));
+        String url = "https://ventanilla.softwaredatab.com/api/gabo/" + getIntent().getExtras().getInt("id");
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.P)
@@ -64,19 +69,19 @@ public class PackageDetail extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("entrega"));
 
-                    code.setText("Codigo: "+jsonObjec2.getString("codigo"));
-                    decripcin.setText("Descripción: "+jsonObjec2.getString("descripcion"));
-                    cordenadas.setText("Cordenadas: "+jsonObjec2.getString("cordenadas"));
+                    code.setText("Codigo: " + jsonObjec2.getString("codigo"));
+                    decripcin.setText("Descripción: " + jsonObjec2.getString("descripcion"));
+                    cordenadas.setText("Cordenadas: " + jsonObjec2.getString("cordenadas"));
 
-                    File imgFile = new  File("/storage/emulated/0/"+jsonObjec2.getString("foto"));
+                    File imgFile = new File("/storage/emulated/0/" + jsonObjec2.getString("foto"));
                     Uri imageUri = Uri.fromFile(imgFile);
 
                     Bitmap bitmap = null;
                     ContentResolver contentResolver = getContentResolver();
                     try {
 
-                            ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, imageUri);
-                            bitmap = ImageDecoder.decodeBitmap(source);
+                        ImageDecoder.Source source = ImageDecoder.createSource(contentResolver, imageUri);
+                        bitmap = ImageDecoder.decodeBitmap(source);
 
                     } catch (Exception e) {
                         Log.d("gabo", "encontra errror al vonvertir a image");
@@ -84,6 +89,7 @@ public class PackageDetail extends AppCompatActivity {
 
                     imageView.setImageBitmap(bitmap);
                     Log.d("gabo", imageUri.toString());
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -100,4 +106,8 @@ public class PackageDetail extends AppCompatActivity {
         });
         Volley.newRequestQueue(PackageDetail.this).add(postRequest);
     }
+
+
+
+
 }
