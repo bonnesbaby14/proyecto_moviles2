@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         ScrollView scrollView = findViewById(R.id.scroll);
-        Button button = findViewById(R.id.nuevo);
+        FloatingActionButton button = findViewById(R.id.nuevo);
         TextView clima=findViewById(R.id.clima);
 
         LinearLayout linearLayout = new LinearLayout(this);
