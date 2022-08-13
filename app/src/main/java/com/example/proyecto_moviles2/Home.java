@@ -33,6 +33,7 @@ public class Home extends AppCompatActivity {
 
         ScrollView scrollView = findViewById(R.id.scroll);
         Button button = findViewById(R.id.nuevo);
+        TextView clima=findViewById(R.id.clima);
 
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -47,7 +48,7 @@ public class Home extends AppCompatActivity {
         }
 
 
-        String url = "http://api.weatherstack.com/current?access_key=3 c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
+        String url = "http://api.weatherstack.com/current?access_key=3c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
         String url2 = "https://ventanilla.softwaredatab.com/api/gabo";
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -62,7 +63,7 @@ public class Home extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("current"));
 
-                    //  txt_login.setText(jsonObjec2.getString("temperature"));
+                      clima.setText(jsonObjec2.getString("temperature")+"°C");
                     Log.d("gabo", response.toString());
 
                 } catch (JSONException e) {

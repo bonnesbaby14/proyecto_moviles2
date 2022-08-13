@@ -25,6 +25,7 @@
         android:text="El clima hoy: "
         android:textColor="#FFFF"
         android:textAlignment="center"
+        android:id="@+id/clima"
         android:textSize="40dp" />
 
     <ScrollView
