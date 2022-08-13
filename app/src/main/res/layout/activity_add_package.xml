@@ -23,14 +23,14 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Codigo paquete: "
+        android:hint="Codigo paquete: "
 
         android:textColor="#FFF"
         android:textSize="25dp" />
     <EditText
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="Descripcion paquete: "
+        android:hint="Descripcion paquete: "
         android:textSize="25dp"
         android:textColor="#FFF"
 
@@ -40,7 +40,7 @@
     <EditText
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="Cordenadas entrega: "
+        android:hint="Cordenadas entrega: "
         android:textSize="25dp"
         android:textColor="#FFF"
         android:layout_marginTop="40dp"

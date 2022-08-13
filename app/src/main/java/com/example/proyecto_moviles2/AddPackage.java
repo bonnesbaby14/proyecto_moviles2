@@ -29,11 +29,23 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddPackage extends AppCompatActivity {
     ImageButton imagen;
+    String fotoname;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +54,73 @@ public class AddPackage extends AppCompatActivity {
         LocationManager locationManager = (LocationManager) AddPackage.this.getSystemService(Context.LOCATION_SERVICE);
 
         EditText cordenadas = findViewById(R.id.cordenadas);
+        EditText codigo = findViewById(R.id.code);
+        EditText descripcion = findViewById(R.id.des);
+
+
         cordenadas.setEnabled(false);
 
         Button getCordenadas = findViewById(R.id.getcord);
 
         imagen = findViewById(R.id.imageTomar);
+        Button enviar=findViewById(R.id.enviar);
+        fotoname="";
 
 
         Log.d("gabo", "cargue el intent ");
+
+        enviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guardarFoto(bitmap);
+                String url = "https://ventanilla.softwaredatab.com/api/gabo";
+                RequestQueue queue = Volley.newRequestQueue(AddPackage.this);
+
+                // on below line we are calling a string
+                // request method to post the data to our API
+                // in this we are calling a post method.
+                StringRequest request = new StringRequest(Request.Method.POST, url, new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        // on below line we are displaying a success toast message.
+                        Toast.makeText(AddPackage.this, "Data added to API", Toast.LENGTH_SHORT).show();
+
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // method to handle errors.
+                        Toast.makeText(AddPackage.this, "Fail to get response = " + error, Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        // below line we are creating a map for
+                        // storing our values in key and value pair.
+                        Map<String, String> params = new HashMap<String, String>();
+
+
+
+                        params.put("codigo", codigo.getText().toString());
+                        params.put("foto", fotoname);
+                        params.put("cordenadas",cordenadas.getText().toString());
+                        params.put("descripcion",descripcion.getText().toString());
+
+
+                        // at last we are
+                        // returning our params.
+                        return params;
+                    }
+                };
+                // below line is to make
+                // a json object request.
+                queue.add(request);
+
+
+            }
+        });
 
         imagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,14 +171,14 @@ public class AddPackage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && data != null) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            int ancho = 700;
-            int alto = 700;
+             bitmap = (Bitmap) data.getExtras().get("data");
+            int ancho = 500;
+            int alto = 500;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ancho, alto);
             imagen.setLayoutParams(params);
 
             imagen.setImageBitmap(bitmap);
-            guardarFoto(bitmap);
+
 
         }
     }
@@ -144,7 +215,7 @@ public class AddPackage extends AppCompatActivity {
         contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
         contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/proyecto_mobiles");
         contentValues.put(MediaStore.Images.Media.IS_PENDING, 1);
-
+        fotoname="Pictures/proyecto_mobiles/"+filename+".jpg";
         Uri colection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         Uri imageuri = contentResolver.insert(colection, contentValues);
         Log.d("gabo", "llegue aqui");
@@ -161,6 +232,7 @@ public class AddPackage extends AppCompatActivity {
         if (save) {
             Toast.makeText(AddPackage.this, "la imagen se guardo en el dispositivo", Toast.LENGTH_SHORT).show();
         }
+
         if (outputStream != null) {
             try {
                 outputStream.flush();
