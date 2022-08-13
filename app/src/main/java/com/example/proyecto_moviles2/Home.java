@@ -31,30 +31,26 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ScrollView scrollView=findViewById(R.id.scroll);
-        Button button =findViewById(R.id.nuevo);
+        ScrollView scrollView = findViewById(R.id.scroll);
+        Button button = findViewById(R.id.nuevo);
 
-        LinearLayout linearLayout=new LinearLayout(this);
+        LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-
 
 
         scrollView.addView(linearLayout);
 
         try {
-            scrollView.addView(cards("hossla","dossss","wsssss",2));
-        }catch (Exception e)
-        {
+            scrollView.addView(cards("hossla", "dossss", "wsssss", 2));
+        } catch (Exception e) {
             Log.d("gabo", e.toString());
         }
 
 
+        String url = "http://api.weatherstack.com/current?access_key=3 c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
+        String url2 = "https://ventanilla.softwaredatab.com/api/gabo";
 
-        String url="http://api.weatherstack.com/current?access_key=3 c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
-        String url2="https://ventanilla.softwaredatab.com/api/gabo";
-
-        StringRequest postRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -63,8 +59,8 @@ public class Home extends AppCompatActivity {
                     //dame contenido
                     //ese CULO
                     //sube
-                    JSONObject jsonObject=new JSONObject(response);
-                    JSONObject jsonObjec2=new JSONObject(jsonObject.getString("current"));
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("current"));
 
                     //  txt_login.setText(jsonObjec2.getString("temperature"));
                     Log.d("gabo", response.toString());
@@ -84,7 +80,7 @@ public class Home extends AppCompatActivity {
         });
         Volley.newRequestQueue(Home.this).add(postRequest);
 
-        StringRequest postRequest2=new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -93,21 +89,21 @@ public class Home extends AppCompatActivity {
                     //dame contenido
                     //ese CULO
                     //sube
-                    JSONObject jsonObject=new JSONObject(response);
-                    JSONArray jsonObjec2=new JSONArray(jsonObject.getString("entregas"));
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
                     for (int i = 0; i < jsonObjec2.length(); i++) {
                         JSONObject obj = jsonObjec2.getJSONObject(i);
-                        linearLayout.addView(cards(obj.getString("codigo"),obj.getString("cordenadas"),obj.getString("descripcion"),obj.getInt("identrega")));
+                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
 
                     }
 
 
-                        //  txt_login.setText(jsonObjec2.getString("temperature"));
+                    //  txt_login.setText(jsonObjec2.getString("temperature"));
                     Log.d("gabo", response.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("gabo","error en segunda peticion"+ e.toString());
+                    Log.d("gabo", "error en segunda peticion" + e.toString());
                     // txt_login.setText("no se puedo");
                 }
 
@@ -138,25 +134,25 @@ public class Home extends AppCompatActivity {
 
     }
 
-    private CardView cards(String codigo, String cordenada, String descripcion,int id){
-        TextView item =new TextView(this);
+    private CardView cards(String codigo, String cordenada, String descripcion, int id) {
+        TextView item = new TextView(this);
         item.setText(codigo);
-        item.setPadding(15,15,15,15);
+        item.setPadding(15, 15, 15, 15);
 
-        TextView item2 =new TextView(this);
+        TextView item2 = new TextView(this);
         item2.setText(cordenada);
-        item2.setPadding(15,15,15,15);
+        item2.setPadding(15, 15, 15, 15);
 
-        CardView card=new CardView(this);
+        CardView card = new CardView(this);
 
         card.setMinimumWidth(700);
         card.setMinimumHeight(90);
-        card.setPadding(20,5,20,5);
+        card.setPadding(20, 5, 20, 5);
         card.setId(id);
 
         //card.setCardBackgroundColor(Color.parseColor("#FFFF"));
 
-        LinearLayout linearLayout=new LinearLayout(this);
+        LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(item);
         linearLayout.addView(item2);
@@ -165,7 +161,7 @@ public class Home extends AppCompatActivity {
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("gabo", "se cliqueo el "+card.getId());
+                Log.d("gabo", "se cliqueo el " + card.getId());
                 Intent intent = new Intent(Home.this, PackageDetail.class);
 
                 Bundle parmetros = new Bundle();
