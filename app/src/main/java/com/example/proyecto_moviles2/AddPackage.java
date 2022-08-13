@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 public class AddPackage extends AppCompatActivity {
     ImageButton imagen;
@@ -92,8 +93,10 @@ public class AddPackage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && data != null) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            imagen.setMinimumWidth(500);
-            imagen.setMinimumHeight(200);
+            int ancho = 700;
+            int alto = 700;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ancho, alto);
+            imagen.setLayoutParams(params);
 
             imagen.setImageBitmap(bitmap);
 
