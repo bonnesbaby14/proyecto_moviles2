@@ -7,6 +7,8 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +17,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -23,6 +27,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.OutputStream;
 
 public class AddPackage extends AppCompatActivity {
     ImageButton imagen;
@@ -99,6 +107,7 @@ public class AddPackage extends AppCompatActivity {
             imagen.setLayoutParams(params);
 
             imagen.setImageBitmap(bitmap);
+            guardarFoto(bitmap);
 
         }
     }
@@ -123,4 +132,56 @@ public class AddPackage extends AppCompatActivity {
 
         //}
     }
+
+    public void guardarFoto(Bitmap bitmap) {
+        OutputStream outputStream = null;
+        File file=null;
+
+        ContentResolver contentResolver = getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        String filename = System.currentTimeMillis() + "_image";
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
+        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/proyecto_mobiles");
+        contentValues.put(MediaStore.Images.Media.IS_PENDING, 1);
+
+        Uri colection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+        Uri imageuri = contentResolver.insert(colection, contentValues);
+        Log.d("gabo", "llegue aqui");
+        try {
+            outputStream = contentResolver.openOutputStream(imageuri);
+        } catch (Exception e) {
+            Log.d("gabo", "error guardando la foto " + e.toString());
+        }
+        contentValues.clear();
+        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0);
+        contentResolver.update(imageuri, contentValues, null, null);
+        boolean save = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+        if (save) {
+            Toast.makeText(AddPackage.this, "la imagen se guardo en el dispositivo", Toast.LENGTH_SHORT).show();
+        }
+        if (outputStream != null) {
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                Log.d("gabo", "error cerarndo el bufer la foto " + e.toString());
+            }
+
+
+        }
+        if(file!=null) {
+
+            MediaScannerConnection.scanFile(this,
+                    new String[] {file.toString()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri_local) {
+                            Log.i("gabo", "Scanned " + path + ":");
+                            Log.i("gabo", "-> uri=" + uri_local);
+                        }
+                    });
+        }
+        }
+
 }
