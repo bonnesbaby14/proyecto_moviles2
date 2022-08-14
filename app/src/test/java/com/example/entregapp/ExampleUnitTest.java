@@ -1,4 +1,4 @@
-package com.example.proyecto_moviles2;
+package com.example.entregapp;
 
 import org.junit.Test;
 

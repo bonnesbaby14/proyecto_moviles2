@@ -1,15 +1,11 @@
-package com.example.proyecto_moviles2;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+package com.example.entregapp.ui.home;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -19,29 +15,46 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.entregapp.AddPackage;
+import com.example.entregapp.R;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.entregapp.databinding.FragmentHomeBinding;
+import com.example.entregapp.ui.PackageDetail;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Home extends AppCompatActivity {
+public class HomeFragment extends Fragment {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    private FragmentHomeBinding binding;
 
-        ScrollView scrollView = findViewById(R.id.scroll);
-        FloatingActionButton button = findViewById(R.id.nuevo);
-        TextView clima=findViewById(R.id.clima);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        HomeViewModel homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
 
-        LinearLayout linearLayout = new LinearLayout(this);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        //  final TextView textView = binding.textHome;
+        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        ScrollView scrollView = root.findViewById(R.id.scroll);
+        FloatingActionButton button = root.findViewById(R.id.nuevo);
+        TextView clima = root.findViewById(R.id.clima);
+
+        LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
 
         scrollView.addView(linearLayout);
-
         try {
             scrollView.addView(cards("hossla", "dossss", "wsssss", 2));
         } catch (Exception e) {
@@ -64,7 +77,7 @@ public class Home extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("current"));
 
-                      clima.setText(jsonObjec2.getString("temperature")+"°C");
+                    clima.setText(jsonObjec2.getString("temperature") + "°C");
                     Log.d("gabo", response.toString());
 
                 } catch (JSONException e) {
@@ -80,7 +93,7 @@ public class Home extends AppCompatActivity {
                 Log.d("gabo", error.toString());
             }
         });
-        Volley.newRequestQueue(Home.this).add(postRequest);
+        Volley.newRequestQueue(getContext()).add(postRequest);
 
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
@@ -117,7 +130,7 @@ public class Home extends AppCompatActivity {
                 Log.d("gabo", error.toString());
             }
         });
-        Volley.newRequestQueue(Home.this).add(postRequest2);
+        Volley.newRequestQueue(getContext()).add(postRequest2);
         //lo mas seguido
         //pa que to
         //el mundo
@@ -127,25 +140,38 @@ public class Home extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Home.this, AddPackage.class);
+
+                Fragment addPackage = new AddPackage();
 
 
-                startActivity(intent);
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+
+
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addPackage).commit();
+                fragmentTransaction.addToBackStack(null);
+
             }
         });
 
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     private CardView cards(String codigo, String cordenada, String descripcion, int id) {
-        TextView item = new TextView(this);
+        TextView item = new TextView(getContext());
         item.setText(codigo);
         item.setPadding(15, 15, 15, 15);
 
-        TextView item2 = new TextView(this);
+        TextView item2 = new TextView(getContext());
         item2.setText(cordenada);
         item2.setPadding(15, 15, 15, 15);
 
-        CardView card = new CardView(this);
+        CardView card = new CardView(getContext());
 
         card.setMinimumWidth(700);
         card.setMinimumHeight(90);
@@ -154,7 +180,7 @@ public class Home extends AppCompatActivity {
 
         //card.setCardBackgroundColor(Color.parseColor("#FFFF"));
 
-        LinearLayout linearLayout = new LinearLayout(this);
+        LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(item);
         linearLayout.addView(item2);
@@ -164,12 +190,20 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("gabo", "se cliqueo el " + card.getId());
-                Intent intent = new Intent(Home.this, PackageDetail.class);
+                Fragment packageDetail = new PackageDetail();
+
+
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+
 
                 Bundle parmetros = new Bundle();
                 parmetros.putInt("id", card.getId());
-                intent.putExtras(parmetros);
-                startActivity(intent);
+                packageDetail.setArguments(parmetros);
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, packageDetail).commit();
+                fragmentTransaction.addToBackStack(null);
+
+                //intent.putExtras(parmetros);
+                //startActivity(intent);
 
             }
         });
@@ -177,6 +211,4 @@ public class Home extends AppCompatActivity {
 
 
     }
-
-
 }
