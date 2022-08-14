@@ -2,10 +2,13 @@ package com.example.entregapp.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -49,6 +52,7 @@ public class HomeFragment extends Fragment {
         ScrollView scrollView = root.findViewById(R.id.scroll);
         FloatingActionButton button = root.findViewById(R.id.nuevo);
         TextView clima = root.findViewById(R.id.clima);
+        EditText buscar=root.findViewById(R.id.buscar);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -94,43 +98,8 @@ public class HomeFragment extends Fragment {
             }
         });
         Volley.newRequestQueue(getContext()).add(postRequest);
+        getInfo(linearLayout,buscar.getText().toString());
 
-        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    //TU eres BEBESITA eres BEBESOTAAAA
-                    //Mami sube algo
-                    //dame contenido
-                    //ese CULO
-                    //sube
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
-                    for (int i = 0; i < jsonObjec2.length(); i++) {
-                        JSONObject obj = jsonObjec2.getJSONObject(i);
-                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
-
-                    }
-
-
-                    //  txt_login.setText(jsonObjec2.getString("temperature"));
-                    Log.d("gabo", response.toString());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("gabo", "error en segunda peticion" + e.toString());
-                    // txt_login.setText("no se puedo");
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Log.d("gabo", error.toString());
-            }
-        });
-        Volley.newRequestQueue(getContext()).add(postRequest2);
         //lo mas seguido
         //pa que to
         //el mundo
@@ -150,6 +119,24 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addPackage).commit();
                 fragmentTransaction.addToBackStack(null);
 
+            }
+        });
+        buscar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                linearLayout.removeAllViews();
+                linearLayout.removeAllViewsInLayout();
+                getInfo(linearLayout,buscar.getText().toString());
             }
         });
 
@@ -208,6 +195,48 @@ public class HomeFragment extends Fragment {
             }
         });
         return card;
+
+
+    }
+
+    public void getInfo(LinearLayout linearLayout, String query){
+        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query="+query;
+        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    //TU eres BEBESITA eres BEBESOTAAAA
+                    //Mami sube algo
+                    //dame contenido
+                    //ese CULO
+                    //sube
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
+                    for (int i = 0; i < jsonObjec2.length(); i++) {
+                        JSONObject obj = jsonObjec2.getJSONObject(i);
+                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
+
+                    }
+
+
+                    //  txt_login.setText(jsonObjec2.getString("temperature"));
+                    Log.d("gabo", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("gabo", "error en segunda peticion" + e.toString());
+                    // txt_login.setText("no se puedo");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("gabo", error.toString());
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(postRequest2);
 
 
     }
