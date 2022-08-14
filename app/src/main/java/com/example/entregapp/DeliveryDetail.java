@@ -44,7 +44,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.entregapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,9 +73,9 @@ public class DeliveryDetail extends Fragment {
         View view= inflater.inflate(R.layout.fragment_delivery_detail, container, false);
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        EditText code = view.findViewById(R.id.code);
-        EditText cordenadas = view.findViewById(R.id.cordenadas);
-        EditText decripcin = view.findViewById(R.id.des);
+        EditText code = view.findViewById(R.id.nombre);
+        EditText cordenadas = view.findViewById(R.id.direcion);
+        EditText decripcin = view.findViewById(R.id.Telefono);
         imagen = view.findViewById(R.id.imageTomar);
         cordenadas.setEnabled(false);
         Button getCordenadas = view.findViewById(R.id.getcord);

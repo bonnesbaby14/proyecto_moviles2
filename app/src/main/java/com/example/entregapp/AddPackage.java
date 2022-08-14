@@ -1,6 +1,5 @@
 package com.example.entregapp;
 
-import android.graphics.ImageDecoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -43,7 +42,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -73,9 +71,9 @@ public class AddPackage extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_package, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        EditText cordenadas = view.findViewById(R.id.cordenadas);
-        EditText codigo = view.findViewById(R.id.code);
-        EditText descripcion = view.findViewById(R.id.des);
+        EditText cordenadas = view.findViewById(R.id.direcion);
+        EditText codigo = view.findViewById(R.id.nombre);
+        EditText descripcion = view.findViewById(R.id.Telefono);
 
         cordenadas.setEnabled(false);
 

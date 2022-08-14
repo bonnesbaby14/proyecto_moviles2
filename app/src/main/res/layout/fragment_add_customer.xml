@@ -9,28 +9,11 @@
     android:background="@drawable/background"
     tools:context=".AddPackage">
 
-    <ImageButton
-        android:id="@+id/imageTomar"
-        android:layout_width="220dp"
-        android:layout_height="176dp"
-        android:layout_marginVertical="20dp"
-
-        android:src="@drawable/ic_baseline_image_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@android:color/transparent"
-        android:padding="0dp"
-        android:scaleType="fitXY"
-        app:layout_constraintVertical_bias="0.028"></ImageButton>
-
     <EditText
-        android:id="@+id/code"
+        android:id="@+id/nombre"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Codigo paquete: "
+        android:hint="Nombre:"
 
         android:textColor="#FFF"
         android:textSize="25dp"
@@ -42,12 +25,13 @@
         app:layout_constraintVertical_bias="0.358" />
 
     <EditText
-        android:id="@+id/des"
+        android:id="@+id/Telefono"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Descripcion paquete: "
-        android:textColor="#FFF"
+        android:hint="telefono:"
+        android:inputType="phone"
 
+        android:textColor="#FFF"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,10 +41,10 @@
         app:layout_constraintVertical_bias="0.475" />
 
     <EditText
-        android:id="@+id/cordenadas"
+        android:id="@+id/direcion"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Cordenadas entrega: "
+        android:hint="Direccion:"
         android:textColor="#FFF"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,20 +53,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.599" />
-
-    <Button
-        android:id="@+id/getcord"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:text="Obtener cordenadas"
-        android:textColor="#FFF"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.737"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.705" />
 
     <Button
         android:id="@+id/enviar"

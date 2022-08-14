@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
                 Fragment addDelivery = new AddDelivery();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addDelivery).commit();
-                fragmentTransaction.addToBackStack(null);
+
 
 
             }
@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment {
                 parmetros.putInt("id", card.getId());
                 deliveryDetail.setArguments(parmetros);
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, deliveryDetail ).commit();
-                fragmentTransaction.addToBackStack(null);
+
 
 
             }

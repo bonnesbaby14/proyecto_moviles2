@@ -69,9 +69,9 @@ public class AddDelivery extends Fragment {
         View view =inflater.inflate(R.layout.fragment_entrega_detail, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        EditText cordenadas = view.findViewById(R.id.cordenadas);
-        EditText codigo = view.findViewById(R.id.code);
-        EditText descripcion = view.findViewById(R.id.des);
+        EditText cordenadas = view.findViewById(R.id.direcion);
+        EditText codigo = view.findViewById(R.id.nombre);
+        EditText descripcion = view.findViewById(R.id.Telefono);
 
         cordenadas.setEnabled(false);
 

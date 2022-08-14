@@ -22,4 +22,9 @@
         android:name="com.example.entregapp.ui.slideshow.SlideshowFragment"
         android:label="Clientes"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_users"
+        android:name="com.example.entregapp.UsersFragment"
+        android:label="Users"
+        tools:layout="@layout/fragment_users" />
 </navigation>

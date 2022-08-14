@@ -16,16 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.entregapp.AddDelivery;
 import com.example.entregapp.AddPackage;
-import com.example.entregapp.DeliveryDetail;
 import com.example.entregapp.PackageDetail;
 import com.example.entregapp.R;
 import com.example.entregapp.databinding.FragmentGalleryBinding;

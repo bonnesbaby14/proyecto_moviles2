@@ -17,7 +17,7 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Clientes" />
         <item
-            android:id="@+id/nav_usuario"
+            android:id="@+id/nav_users"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Usuario" />
 

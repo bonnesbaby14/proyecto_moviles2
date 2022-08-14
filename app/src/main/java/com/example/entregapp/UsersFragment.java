@@ -1,6 +1,11 @@
-package com.example.entregapp.ui.slideshow;
+package com.example.entregapp;
 
 import android.os.Bundle;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,46 +17,37 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.entregapp.AddCustomer;
-import com.example.entregapp.AddPackage;
-import com.example.entregapp.CustomerDetail;
-import com.example.entregapp.PackageDetail;
-import com.example.entregapp.R;
-import com.example.entregapp.databinding.FragmentSlideshowBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SlideshowFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+public class UsersFragment extends Fragment {
+
     public ScrollView scrollView ;
+    public UsersFragment() {
+        // Required empty public constructor
+    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
-        scrollView = root.findViewById(R.id.scroll);
-        FloatingActionButton nuevo = root.findViewById(R.id.nuevo);
-        TextView clima = root.findViewById(R.id.clima);
-        EditText buscar = root.findViewById(R.id.buscar);
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view= inflater.inflate(R.layout.fragment_users, container, false);
+        scrollView = view.findViewById(R.id.scroll);
+        FloatingActionButton nuevo = view.findViewById(R.id.nuevo);
+        TextView clima = view.findViewById(R.id.clima);
+        EditText buscar = view.findViewById(R.id.buscar);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -85,14 +81,14 @@ public class SlideshowFragment extends Fragment {
         Volley.newRequestQueue(getContext()).add(postRequest);
         getInfo(linearLayout, buscar.getText().toString());
         Log.d("gaboF", "SE CARGO la info desde caga de fragmnet");
-        Log.d("gaboG", "LLEGUE AQUI");
+
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Fragment addCustomer = new AddCustomer();
+                Fragment addDelivery = new AddDelivery();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addCustomer).commit();
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addDelivery).commit();
 
 
 
@@ -119,14 +115,8 @@ public class SlideshowFragment extends Fragment {
                 Log.d("gaboF", "SE CARGO la info desde after text");
             }
         });
-        Log.d("gaboG", "LLEGUE AQUI");
-        return root;
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+        return view;
     }
 
     private CardView cards(String codigo, String cordenada, String descripcion, int id) {
@@ -156,12 +146,15 @@ public class SlideshowFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("gabo", "se cliqueo el " + card.getId());
-                Fragment customerDetail = new CustomerDetail();
+                Fragment deliveryDetail = new DeliveryDetail();
+
+
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+
                 Bundle parmetros = new Bundle();
                 parmetros.putInt("id", card.getId());
-                customerDetail.setArguments(parmetros);
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, customerDetail ).commit();
+                deliveryDetail.setArguments(parmetros);
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, deliveryDetail ).commit();
 
 
 
@@ -177,13 +170,13 @@ public class SlideshowFragment extends Fragment {
         linearLayout.removeAllViews();
         linearLayout.removeAllViewsInLayout();
 
-        String url2 = "https://ventanilla.softwaredatab.com/api/cliente?query=" + query;
+        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query=" + query;
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("clientes"));
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
                     scrollView.removeAllViewsInLayout();
                     linearLayout.removeAllViewsInLayout();
                     for (int i = 0; i < jsonObjec2.length(); i++) {
@@ -191,7 +184,7 @@ public class SlideshowFragment extends Fragment {
 
 
 
-                        linearLayout.addView(cards(obj.getString("nombre"), obj.getString("telefono"), obj.getString("direccion"), obj.getInt("idcliente")));
+                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
 
                     }
                     scrollView.addView(linearLayout);

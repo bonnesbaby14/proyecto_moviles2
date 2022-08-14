@@ -27,7 +27,7 @@
         app:layout_constraintVertical_bias="0.028"></ImageButton>
 
     <EditText
-        android:id="@+id/code"
+        android:id="@+id/nombre"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:hint="Codigo paquete: "
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.358" />
 
     <EditText
-        android:id="@+id/des"
+        android:id="@+id/Telefono"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:hint="Descripcion paquete: "
@@ -57,7 +57,7 @@
         app:layout_constraintVertical_bias="0.475" />
 
     <EditText
-        android:id="@+id/cordenadas"
+        android:id="@+id/direcion"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:hint="Cordenadas entrega: "
