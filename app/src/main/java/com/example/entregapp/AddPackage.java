@@ -70,7 +70,6 @@ public class AddPackage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_package, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -81,9 +80,6 @@ public class AddPackage extends Fragment {
         cordenadas.setEnabled(false);
 
         Button getCordenadas = view.findViewById(R.id.getcord);
-        Button eliminar = view.findViewById(R.id.eliminar);
-
-
         imagen = view.findViewById(R.id.imageTomar);
         Button enviar = view.findViewById(R.id.enviar);
         fotoname = "";

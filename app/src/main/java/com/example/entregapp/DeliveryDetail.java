@@ -19,6 +19,15 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
+
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,20 +38,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.entregapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,15 +54,16 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PackageDetail extends Fragment {
+
+public class DeliveryDetail extends Fragment {
 
     ImageButton imagen;
     String fotoname;
     String fotonameaux;
     Bitmap bitmap;
 
-    public PackageDetail() {
-        // Required empty public constructor
+    public DeliveryDetail() {
+
     }
 
 
@@ -68,7 +71,8 @@ public class PackageDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_package_detail, container, false);
+        View view= inflater.inflate(R.layout.fragment_delivery_detail, container, false);
+
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         EditText code = view.findViewById(R.id.code);
         EditText cordenadas = view.findViewById(R.id.cordenadas);
@@ -267,9 +271,9 @@ public class PackageDetail extends Fragment {
         });
         Volley.newRequestQueue(getContext()).add(postRequest);
 
+
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -17,7 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.entregapp.AddDelivery;
 import com.example.entregapp.AddPackage;
+import com.example.entregapp.DeliveryDetail;
 import com.example.entregapp.PackageDetail;
 import com.example.entregapp.R;
 
@@ -38,29 +40,22 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    public ScrollView scrollView ;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        Log.d("gaboF", "SE CARGO EL FRAGMANENT");
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        ScrollView scrollView = root.findViewById(R.id.scroll);
-        FloatingActionButton button = root.findViewById(R.id.nuevo);
+         scrollView = root.findViewById(R.id.scroll);
+        FloatingActionButton nuevo = root.findViewById(R.id.nuevo);
         TextView clima = root.findViewById(R.id.clima);
         EditText buscar = root.findViewById(R.id.buscar);
 
-        LinearLayout linearLayout = new LinearLayout(getContext());
+       LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-
         scrollView.addView(linearLayout);
-        try {
-            scrollView.addView(cards("hossla", "dossss", "wsssss", 2));
-        } catch (Exception e) {
-            Log.d("gabo", e.toString());
-        }
-
 
         String url = "http://api.weatherstack.com/current?access_key=3c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
 
@@ -68,6 +63,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
+
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("current"));
 
@@ -87,16 +83,18 @@ public class HomeFragment extends Fragment {
             }
         });
         Volley.newRequestQueue(getContext()).add(postRequest);
-        getInfo(linearLayout, buscar.getText().toString());
+            getInfo(linearLayout, buscar.getText().toString());
+        Log.d("gaboF", "SE CARGO la info desde caga de fragmnet");
 
-        button.setOnClickListener(new View.OnClickListener() {
+        nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Fragment addPackage = new AddPackage();
+                Fragment addDelivery = new AddDelivery();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addPackage).commit();
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addDelivery).commit();
                 fragmentTransaction.addToBackStack(null);
+
 
             }
         });
@@ -113,9 +111,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                linearLayout.removeAllViews();
-                linearLayout.removeAllViewsInLayout();
+
+
+
+
                 getInfo(linearLayout, buscar.getText().toString());
+                Log.d("gaboF", "SE CARGO la info desde after text");
             }
         });
 
@@ -125,6 +126,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        scrollView.removeAllViews();
+        scrollView.removeAllViewsInLayout();
+
         binding = null;
     }
 
@@ -155,15 +159,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("gabo", "se cliqueo el " + card.getId());
-                Fragment packageDetail = new PackageDetail();
+                Fragment deliveryDetail = new DeliveryDetail();
 
 
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
 
                 Bundle parmetros = new Bundle();
                 parmetros.putInt("id", card.getId());
-                packageDetail.setArguments(parmetros);
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, packageDetail).commit();
+                deliveryDetail.setArguments(parmetros);
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, deliveryDetail ).commit();
                 fragmentTransaction.addToBackStack(null);
 
 
@@ -175,6 +179,10 @@ public class HomeFragment extends Fragment {
     }
 
     public void getInfo(LinearLayout linearLayout, String query) {
+        Log.d("gaboF", "SE CARGO la info");
+        linearLayout.removeAllViews();
+        linearLayout.removeAllViewsInLayout();
+
         String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query=" + query;
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
@@ -182,11 +190,17 @@ public class HomeFragment extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
+                    scrollView.removeAllViewsInLayout();
+                    linearLayout.removeAllViewsInLayout();
                     for (int i = 0; i < jsonObjec2.length(); i++) {
                         JSONObject obj = jsonObjec2.getJSONObject(i);
+
+
+
                         linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
 
                     }
+                    scrollView.addView(linearLayout);
 
                     Log.d("gabo", response.toString());
 
