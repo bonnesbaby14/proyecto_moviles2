@@ -1,4 +1,4 @@
-package com.example.entregapp.ui;
+package com.example.entregapp;
 
 import android.Manifest;
 import android.app.NotificationChannel;
@@ -19,6 +19,15 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,25 +37,12 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.entregapp.MainActivity;
-import com.example.entregapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +52,6 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class PackageDetail extends Fragment {
 
     ImageButton imagen;
@@ -64,6 +59,7 @@ public class PackageDetail extends Fragment {
     String fotonameaux;
 
     Bitmap bitmap;
+
     public PackageDetail() {
         // Required empty public constructor
     }
@@ -73,19 +69,17 @@ public class PackageDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_package_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_package_detail, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         EditText code = view.findViewById(R.id.code);
         EditText cordenadas = view.findViewById(R.id.cordenadas);
         EditText decripcin = view.findViewById(R.id.des);
-         imagen = view.findViewById(R.id.imageTomar);
+        imagen = view.findViewById(R.id.imageTomar);
         cordenadas.setEnabled(false);
         Button getCordenadas = view.findViewById(R.id.getcord);
         Bundle datosRecuperados = getArguments();
         Button enviar = view.findViewById(R.id.enviar);
         Button eliminar = view.findViewById(R.id.eliminar);
-
-
 
 
         eliminar.setOnClickListener(new View.OnClickListener() {
@@ -96,9 +90,6 @@ public class PackageDetail extends Fragment {
                 String url = "https://ventanilla.softwaredatab.com/api/gabo/" + datosRecuperados.getInt("id");
                 RequestQueue queue = Volley.newRequestQueue(getContext());
 
-                // on below line we are calling a string
-                // request method to post the data to our API
-                // in this we are calling a post method.
                 StringRequest request = new StringRequest(Request.Method.DELETE, url,
                         new com.android.volley.Response.Listener<String>() {
                             @Override
@@ -117,19 +108,14 @@ public class PackageDetail extends Fragment {
                 }) {
                     @Override
                     protected Map<String, String> getParams() {
-                        // below line we are creating a map for
-                        // storing our values in key and value pair.
+
                         Map<String, String> params = new HashMap<String, String>();
 
-                        // at last we are
-                        // returning our params.
                         return params;
                     }
                 };
-                // below line is to make
-                // a json object request.
-                queue.add(request);
 
+                queue.add(request);
             }
         });
         fotoname = "";
@@ -138,18 +124,15 @@ public class PackageDetail extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                fotonameaux=fotoname;
+                fotonameaux = fotoname;
                 try {
                     guardarFoto(bitmap);
-                }catch (Exception e){
-    fotoname=fotonameaux;
+                } catch (Exception e) {
+                    fotoname = fotonameaux;
                 }
                 String url = "https://ventanilla.softwaredatab.com/api/gabo/" + datosRecuperados.getInt("id");
                 RequestQueue queue = Volley.newRequestQueue(getContext());
-                Log.d("gabo", "esta es la url"+url);
-                // on below line we are calling a string
-                // request method to post the data to our API
-                // in this we are calling a post method.
+                Log.d("gabo", "esta es la url" + url);
                 StringRequest request = new StringRequest(Request.Method.PATCH, url,
                         new com.android.volley.Response.Listener<String>() {
                             @Override
@@ -172,30 +155,25 @@ public class PackageDetail extends Fragment {
                         }, new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // method to handle errors.
                         Toast.makeText(getContext(), "Error con api = " + error, Toast.LENGTH_SHORT).show();
                     }
                 }) {
                     @Override
                     protected Map<String, String> getParams() {
-                        // below line we are creating a map for
-                        // storing our values in key and value pair.
+
                         Map<String, String> params = new HashMap<String, String>();
 
                         params.put("codigo", code.getText().toString());
                         params.put("foto", fotoname);
                         params.put("cordenadas", cordenadas.getText().toString());
                         params.put("descripcion", decripcin.getText().toString());
-                        Log.d("gaboFOTO", "uriImagen "+"/storage/emulated/0/" + fotoname);
-                        // at last we are
-                        // returning our params.
+                        Log.d("gaboFOTO", "uriImagen " + "/storage/emulated/0/" + fotoname);
+
                         return params;
                     }
                 };
-                // below line is to make
-                // a json object request.
-                queue.add(request);
 
+                queue.add(request);
             }
         });
 
@@ -210,7 +188,7 @@ public class PackageDetail extends Fragment {
                     tomarfoto();
                 } else {
                     Log.d("gabo", "no puede  a llamar a la funcion");
-                    ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA },
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
                             100);
 
                 }
@@ -225,17 +203,9 @@ public class PackageDetail extends Fragment {
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             100);
                     Log.d("gabo", "no tengo permisos de cordenadas");
-                    // TODO: Consider calling
-                    // ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    // public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    // int[] grantResults)
-                    // to handle the case where the user grants the permission. See the
-                    // documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
                 LocationListener locationListener = new LocationListener() {
@@ -249,7 +219,7 @@ public class PackageDetail extends Fragment {
             }
         });
 
-        Log.d("gabo", "llego el intent el code:  " +datosRecuperados.getInt("id"));
+        Log.d("gabo", "llego el intent el code:  " + datosRecuperados.getInt("id"));
         String url = "https://ventanilla.softwaredatab.com/api/gabo/" + datosRecuperados.getInt("id");
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -257,21 +227,16 @@ public class PackageDetail extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    //TU eres BEBESITA eres BEBESOTAAAA
-                    //Mami sube algo
-                    //dame contenido
-                    //ese CULO
-                    //sube
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("entrega"));
 
                     code.setText(jsonObjec2.getString("codigo"));
                     decripcin.setText(jsonObjec2.getString("descripcion"));
                     cordenadas.setText(jsonObjec2.getString("cordenadas"));
-                    fotoname=jsonObjec2.getString("foto");
+                    fotoname = jsonObjec2.getString("foto");
 
                     File imgFile = new File("/storage/emulated/0/" + jsonObjec2.getString("foto"));
-                    Log.d("gaboFOTO", "uriImagen "+"/storage/emulated/0/" + jsonObjec2.getString("foto"));
+                    Log.d("gaboFOTO", "uriImagen " + "/storage/emulated/0/" + jsonObjec2.getString("foto"));
                     Uri imageUri = Uri.fromFile(imgFile);
 
                     Bitmap bitmap = null;
@@ -291,7 +256,6 @@ public class PackageDetail extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    // txt_login.setText("no se puedo");
                 }
 
             }
@@ -387,7 +351,7 @@ public class PackageDetail extends Fragment {
         if (file != null) {
 
             MediaScannerConnection.scanFile(getContext(),
-                    new String[] { file.toString() }, null,
+                    new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri_local) {
                             Log.i("gabo", "Scanned " + path + ":");

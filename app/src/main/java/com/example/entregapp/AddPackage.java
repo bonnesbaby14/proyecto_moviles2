@@ -1,5 +1,6 @@
 package com.example.entregapp;
 
+import android.graphics.ImageDecoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,16 +8,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,18 +34,16 @@ import android.location.LocationManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -69,12 +67,11 @@ public class AddPackage extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View  view=inflater.inflate(R.layout.fragment_add_package, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_package, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         EditText cordenadas = view.findViewById(R.id.cordenadas);
@@ -100,10 +97,6 @@ public class AddPackage extends Fragment {
                 guardarFoto(bitmap);
                 String url = "https://ventanilla.softwaredatab.com/api/gabo";
                 RequestQueue queue = Volley.newRequestQueue(getContext());
-
-                // on below line we are calling a string
-                // request method to post the data to our API
-                // in this we are calling a post method.
                 StringRequest request = new StringRequest(Request.Method.POST, url,
                         new com.android.volley.Response.Listener<String>() {
                             @Override
@@ -126,14 +119,13 @@ public class AddPackage extends Fragment {
                         }, new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // method to handle errors.
+
                         Toast.makeText(getContext(), "Error con api = " + error, Toast.LENGTH_SHORT).show();
                     }
                 }) {
                     @Override
                     protected Map<String, String> getParams() {
-                        // below line we are creating a map for
-                        // storing our values in key and value pair.
+
                         Map<String, String> params = new HashMap<String, String>();
 
                         params.put("codigo", codigo.getText().toString());
@@ -141,18 +133,13 @@ public class AddPackage extends Fragment {
                         params.put("cordenadas", cordenadas.getText().toString());
                         params.put("descripcion", descripcion.getText().toString());
 
-                        // at last we are
-                        // returning our params.
                         return params;
                     }
                 };
-                // below line is to make
-                // a json object request.
-                queue.add(request);
 
+                queue.add(request);
             }
         });
-
 
         imagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +152,7 @@ public class AddPackage extends Fragment {
                     tomarfoto();
                 } else {
                     Log.d("gabo", "no puede  a llamar a la funcion");
-                    ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA },
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
                             100);
 
                 }
@@ -180,17 +167,9 @@ public class AddPackage extends Fragment {
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             100);
                     Log.d("gabo", "no tengo permisos de cordenadas");
-                    // TODO: Consider calling
-                    // ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    // public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    // int[] grantResults)
-                    // to handle the case where the user grants the permission. See the
-                    // documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
                 LocationListener locationListener = new LocationListener() {
@@ -203,8 +182,6 @@ public class AddPackage extends Fragment {
 
             }
         });
-
-
         return view;
     }
 
@@ -232,7 +209,6 @@ public class AddPackage extends Fragment {
         if (requestCode == 100) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 tomarfoto();
-
             }
         }
     }
@@ -240,11 +216,8 @@ public class AddPackage extends Fragment {
     public void tomarfoto() {
         Log.d("gabo", "entre a la funcion ");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // if(intent.resolveActivity(getPackageManager())!=null){
         Log.d("gabo", "entre al if de la funcion ");
         startActivityForResult(intent, 101);
-
-        // }
     }
 
     public void guardarFoto(Bitmap bitmap) {
@@ -288,7 +261,7 @@ public class AddPackage extends Fragment {
         if (file != null) {
 
             MediaScannerConnection.scanFile(getContext(),
-                    new String[] { file.toString() }, null,
+                    new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri_local) {
                             Log.i("gabo", "Scanned " + path + ":");
@@ -325,5 +298,6 @@ public class AddPackage extends Fragment {
         managerCompat.notify(1, builder.build());
 
     }
+
 
 }

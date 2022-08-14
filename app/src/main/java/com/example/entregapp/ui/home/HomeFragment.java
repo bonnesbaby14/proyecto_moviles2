@@ -1,6 +1,5 @@
 package com.example.entregapp.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.entregapp.AddPackage;
+import com.example.entregapp.PackageDetail;
 import com.example.entregapp.R;
 
 import androidx.annotation.NonNull;
@@ -28,7 +28,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.entregapp.databinding.FragmentHomeBinding;
-import com.example.entregapp.ui.PackageDetail;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -41,18 +40,15 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        //  final TextView textView = binding.textHome;
-        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         ScrollView scrollView = root.findViewById(R.id.scroll);
         FloatingActionButton button = root.findViewById(R.id.nuevo);
         TextView clima = root.findViewById(R.id.clima);
-        EditText buscar=root.findViewById(R.id.buscar);
+        EditText buscar = root.findViewById(R.id.buscar);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -67,17 +63,11 @@ public class HomeFragment extends Fragment {
 
 
         String url = "http://api.weatherstack.com/current?access_key=3c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
-        String url2 = "https://ventanilla.softwaredatab.com/api/gabo";
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    //TU eres BEBESITA eres BEBESOTAAAA
-                    //Mami sube algo
-                    //dame contenido
-                    //ese CULO
-                    //sube
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("current"));
 
@@ -86,7 +76,6 @@ public class HomeFragment extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    // txt_login.setText("no se puedo");
                 }
 
             }
@@ -98,24 +87,14 @@ public class HomeFragment extends Fragment {
             }
         });
         Volley.newRequestQueue(getContext()).add(postRequest);
-        getInfo(linearLayout,buscar.getText().toString());
-
-        //lo mas seguido
-        //pa que to
-        //el mundo
-        //vea
-        //lo rika k tu esta
+        getInfo(linearLayout, buscar.getText().toString());
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Fragment addPackage = new AddPackage();
-
-
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-
-
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addPackage).commit();
                 fragmentTransaction.addToBackStack(null);
 
@@ -136,7 +115,7 @@ public class HomeFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
                 linearLayout.removeAllViews();
                 linearLayout.removeAllViewsInLayout();
-                getInfo(linearLayout,buscar.getText().toString());
+                getInfo(linearLayout, buscar.getText().toString());
             }
         });
 
@@ -165,7 +144,6 @@ public class HomeFragment extends Fragment {
         card.setPadding(20, 5, 20, 5);
         card.setId(id);
 
-        //card.setCardBackgroundColor(Color.parseColor("#FFFF"));
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -182,15 +160,12 @@ public class HomeFragment extends Fragment {
 
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
 
-
                 Bundle parmetros = new Bundle();
                 parmetros.putInt("id", card.getId());
                 packageDetail.setArguments(parmetros);
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, packageDetail).commit();
                 fragmentTransaction.addToBackStack(null);
 
-                //intent.putExtras(parmetros);
-                //startActivity(intent);
 
             }
         });
@@ -199,17 +174,12 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void getInfo(LinearLayout linearLayout, String query){
-        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query="+query;
+    public void getInfo(LinearLayout linearLayout, String query) {
+        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query=" + query;
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    //TU eres BEBESITA eres BEBESOTAAAA
-                    //Mami sube algo
-                    //dame contenido
-                    //ese CULO
-                    //sube
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
                     for (int i = 0; i < jsonObjec2.length(); i++) {
@@ -218,14 +188,11 @@ public class HomeFragment extends Fragment {
 
                     }
 
-
-                    //  txt_login.setText(jsonObjec2.getString("temperature"));
                     Log.d("gabo", response.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("gabo", "error en segunda peticion" + e.toString());
-                    // txt_login.setText("no se puedo");
                 }
 
             }
