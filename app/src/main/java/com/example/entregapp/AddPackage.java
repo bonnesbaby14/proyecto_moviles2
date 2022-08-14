@@ -56,9 +56,7 @@ import java.util.Map;
 
 public class AddPackage extends Fragment {
 
-    ImageButton imagen;
-    String fotoname;
-    Bitmap bitmap;
+
 
     public AddPackage() {
         // Required empty public constructor
@@ -71,16 +69,14 @@ public class AddPackage extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_package, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        EditText cordenadas = view.findViewById(R.id.direcion);
-        EditText codigo = view.findViewById(R.id.nombre);
-        EditText descripcion = view.findViewById(R.id.Telefono);
+        EditText codigo = view.findViewById(R.id.codigo);
+        EditText nombre = view.findViewById(R.id.nombre);
+        EditText peso = view.findViewById(R.id.peso);
 
-        cordenadas.setEnabled(false);
 
-        Button getCordenadas = view.findViewById(R.id.getcord);
-        imagen = view.findViewById(R.id.imageTomar);
+
+
         Button enviar = view.findViewById(R.id.enviar);
-        fotoname = "";
 
         Log.d("gabo", "cargue el intent ");
 
@@ -88,8 +84,8 @@ public class AddPackage extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                guardarFoto(bitmap);
-                String url = "https://ventanilla.softwaredatab.com/api/gabo";
+
+                String url = "https://ventanilla.softwaredatab.com/api/paquete";
                 RequestQueue queue = Volley.newRequestQueue(getContext());
                 StringRequest request = new StringRequest(Request.Method.POST, url,
                         new com.android.volley.Response.Listener<String>() {
@@ -98,9 +94,9 @@ public class AddPackage extends Fragment {
 
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("entrega"));
+                                    JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("paquete"));
 
-                                    notificaacion(jsonObjec2.getInt("identrega"));
+                                    notificaacion(jsonObjec2.getInt("idpaquete"));
 
                                     Toast.makeText(getContext(), "Datos enviados al servidor", Toast.LENGTH_SHORT)
                                             .show();
@@ -123,9 +119,9 @@ public class AddPackage extends Fragment {
                         Map<String, String> params = new HashMap<String, String>();
 
                         params.put("codigo", codigo.getText().toString());
-                        params.put("foto", fotoname);
-                        params.put("cordenadas", cordenadas.getText().toString());
-                        params.put("descripcion", descripcion.getText().toString());
+
+                        params.put("nombre", nombre.getText().toString());
+                        params.put("peso", peso.getText().toString());
 
                         return params;
                     }
@@ -135,47 +131,9 @@ public class AddPackage extends Fragment {
             }
         });
 
-        imagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Log.d("gabo", "entre al boton imagen");
-                if (ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("gabo", "voy a llamar a la funcion");
-                    tomarfoto();
-                } else {
-                    Log.d("gabo", "no puede  a llamar a la funcion");
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
-                            100);
 
-                }
-            }
-        });
 
-        getCordenadas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("gabo", "entre al boton cordenadas");
-                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            100);
-                    Log.d("gabo", "no tengo permisos de cordenadas");
-                    return;
-                }
-                LocationListener locationListener = new LocationListener() {
-                    @Override
-                    public void onLocationChanged(@NonNull Location location) {
-                        cordenadas.setText("" + location.getLatitude() + " " + location.getLongitude());
-                    }
-                };
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-            }
-        });
         return view;
     }
 
@@ -183,15 +141,7 @@ public class AddPackage extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && data != null) {
-            bitmap = (Bitmap) data.getExtras().get("data");
-            /*
-             * int ancho = 500;
-             * int alto = 500;
-             * LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ancho,
-             * alto);
-             * imagen.setLayoutParams(params);
-             */
-            imagen.setImageBitmap(bitmap);
+
 
         }
     }
@@ -202,68 +152,15 @@ public class AddPackage extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                tomarfoto();
+
             }
         }
     }
 
-    public void tomarfoto() {
-        Log.d("gabo", "entre a la funcion ");
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Log.d("gabo", "entre al if de la funcion ");
-        startActivityForResult(intent, 101);
-    }
 
-    public void guardarFoto(Bitmap bitmap) {
-        OutputStream outputStream = null;
-        File file = null;
 
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        ContentValues contentValues = new ContentValues();
-        String filename = System.currentTimeMillis() + "_image";
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
-        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/proyecto_mobiles");
-        contentValues.put(MediaStore.Images.Media.IS_PENDING, 1);
-        fotoname = "Pictures/proyecto_mobiles/" + filename + ".jpg";
-        Uri colection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-        Uri imageuri = contentResolver.insert(colection, contentValues);
-        Log.d("gabo", "uri de imagen " + imageuri.toString());
-        try {
-            outputStream = contentResolver.openOutputStream(imageuri);
-        } catch (Exception e) {
-            Log.d("gabo", "error guardando la foto " + e.toString());
-        }
-        contentValues.clear();
-        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0);
-        contentResolver.update(imageuri, contentValues, null, null);
-        boolean save = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
-        if (save) {
-            Toast.makeText(getContext(), "la imagen se guardo en el dispositivo", Toast.LENGTH_SHORT).show();
-        }
 
-        if (outputStream != null) {
-            try {
-                outputStream.flush();
-                outputStream.close();
-            } catch (Exception e) {
-                Log.d("gabo", "error cerarndo el bufer la foto " + e.toString());
-            }
-
-        }
-        if (file != null) {
-
-            MediaScannerConnection.scanFile(getContext(),
-                    new String[]{file.toString()}, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        public void onScanCompleted(String path, Uri uri_local) {
-                            Log.i("gabo", "Scanned " + path + ":");
-                            Log.i("gabo", "-> uri=" + uri_local);
-                        }
-                    });
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void notificaacion(int id) {
@@ -284,8 +181,8 @@ public class AddPackage extends Fragment {
         manager.createNotificationChannel(notificationChannel);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "canal")
                 .setSmallIcon(R.drawable.ic_baseline_add_24)
-                .setContentTitle("Nuevo paquete entregado")
-                .setContentText("entregaste un nuevo paquete clic para verlo")
+                .setContentTitle("Nuevo paquete agregafo")
+                .setContentText("Agrgaste un paquete")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getContext());

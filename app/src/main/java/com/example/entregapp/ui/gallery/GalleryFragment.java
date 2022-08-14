@@ -174,13 +174,13 @@ public class GalleryFragment extends Fragment {
         linearLayout.removeAllViews();
         linearLayout.removeAllViewsInLayout();
 
-        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query=" + query;
+        String url2 = "https://ventanilla.softwaredatab.com/api/paquete?query=" + query;
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("paquete"));
                     scrollView.removeAllViewsInLayout();
                     linearLayout.removeAllViewsInLayout();
                     for (int i = 0; i < jsonObjec2.length(); i++) {
@@ -188,7 +188,7 @@ public class GalleryFragment extends Fragment {
 
 
 
-                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
+                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("nombre"), obj.getString("peso"), obj.getInt("idpaquete")));
 
                     }
                     scrollView.addView(linearLayout);
