@@ -23,7 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.entregapp.AddDelivery;
 import com.example.entregapp.AddPackage;
+import com.example.entregapp.DeliveryDetail;
 import com.example.entregapp.PackageDetail;
 import com.example.entregapp.R;
 import com.example.entregapp.databinding.FragmentGalleryBinding;
@@ -37,45 +39,30 @@ public class GalleryFragment extends Fragment {
 
     private FragmentGalleryBinding binding;
 
+    public ScrollView scrollView ;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        //  final TextView textView = binding.textHome;
-        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        ScrollView scrollView = root.findViewById(R.id.scroll);
-        FloatingActionButton button = root.findViewById(R.id.nuevo);
+        scrollView = root.findViewById(R.id.scroll);
+        FloatingActionButton nuevo = root.findViewById(R.id.nuevo);
         TextView clima = root.findViewById(R.id.clima);
-        EditText buscar=root.findViewById(R.id.buscar);
+        EditText buscar = root.findViewById(R.id.buscar);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-
         scrollView.addView(linearLayout);
-        try {
-            scrollView.addView(cards("hossla", "dossss", "wsssss", 2));
-        } catch (Exception e) {
-            Log.d("gabo", e.toString());
-        }
-
 
         String url = "http://api.weatherstack.com/current?access_key=3c0041e95cf6d4489f0c1f9ace158f48&query=guadalajara";
-        String url2 = "https://ventanilla.softwaredatab.com/api/gabo";
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    //TU eres BEBESITA eres BEBESOTAAAA
-                    //Mami sube algo
-                    //dame contenido
-                    //ese CULO
-                    //sube
+
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("current"));
 
@@ -84,7 +71,6 @@ public class GalleryFragment extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    // txt_login.setText("no se puedo");
                 }
 
             }
@@ -96,26 +82,18 @@ public class GalleryFragment extends Fragment {
             }
         });
         Volley.newRequestQueue(getContext()).add(postRequest);
-        getInfo(linearLayout,buscar.getText().toString());
-
-        //lo mas seguido
-        //pa que to
-        //el mundo
-        //vea
-        //lo rika k tu esta
-
-        button.setOnClickListener(new View.OnClickListener() {
+        getInfo(linearLayout, buscar.getText().toString());
+        Log.d("gaboF", "SE CARGO la info desde caga de fragmnet");
+        Log.d("gaboG", "LLEGUE AQUI");
+        nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Fragment addPackage = new AddPackage();
-
-
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-
-
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addPackage).commit();
-                fragmentTransaction.addToBackStack(null);
+
+
 
             }
         });
@@ -132,18 +110,22 @@ public class GalleryFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                linearLayout.removeAllViews();
-                linearLayout.removeAllViewsInLayout();
-                getInfo(linearLayout,buscar.getText().toString());
+
+
+
+
+                getInfo(linearLayout, buscar.getText().toString());
+                Log.d("gaboF", "SE CARGO la info desde after text");
             }
         });
-
+        Log.d("gaboG", "LLEGUE AQUI");
         return root;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+
         binding = null;
     }
 
@@ -163,7 +145,6 @@ public class GalleryFragment extends Fragment {
         card.setPadding(20, 5, 20, 5);
         card.setId(id);
 
-        //card.setCardBackgroundColor(Color.parseColor("#FFFF"));
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -176,19 +157,13 @@ public class GalleryFragment extends Fragment {
             public void onClick(View view) {
                 Log.d("gabo", "se cliqueo el " + card.getId());
                 Fragment packageDetail = new PackageDetail();
-
-
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-
-
                 Bundle parmetros = new Bundle();
                 parmetros.putInt("id", card.getId());
                 packageDetail.setArguments(parmetros);
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, packageDetail).commit();
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, packageDetail ).commit();
 
-                //intent.putExtras(parmetros);
-                //startActivity(intent);
+
 
             }
         });
@@ -197,33 +172,35 @@ public class GalleryFragment extends Fragment {
 
     }
 
-    public void getInfo(LinearLayout linearLayout, String query){
-        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query="+query;
+    public void getInfo(LinearLayout linearLayout, String query) {
+        Log.d("gaboF", "SE CARGO la info");
+        linearLayout.removeAllViews();
+        linearLayout.removeAllViewsInLayout();
+
+        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query=" + query;
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    //TU eres BEBESITA eres BEBESOTAAAA
-                    //Mami sube algo
-                    //dame contenido
-                    //ese CULO
-                    //sube
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
+                    scrollView.removeAllViewsInLayout();
+                    linearLayout.removeAllViewsInLayout();
                     for (int i = 0; i < jsonObjec2.length(); i++) {
                         JSONObject obj = jsonObjec2.getJSONObject(i);
+
+
+
                         linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
 
                     }
+                    scrollView.addView(linearLayout);
 
-
-                    //  txt_login.setText(jsonObjec2.getString("temperature"));
                     Log.d("gabo", response.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("gabo", "error en segunda peticion" + e.toString());
-                    // txt_login.setText("no se puedo");
                 }
 
             }
