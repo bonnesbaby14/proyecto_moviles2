@@ -93,7 +93,7 @@ public class SlideshowFragment extends Fragment {
                 Fragment addCustomer = new AddCustomer();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addCustomer).commit();
-
+                fragmentTransaction.addToBackStack("SlideshowFragment");
 
 
             }
@@ -163,7 +163,7 @@ public class SlideshowFragment extends Fragment {
                 customerDetail.setArguments(parmetros);
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, customerDetail ).commit();
 
-
+                fragmentTransaction.addToBackStack("SlideshowFragment");
 
             }
         });

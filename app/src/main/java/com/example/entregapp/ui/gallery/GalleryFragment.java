@@ -89,7 +89,7 @@ public class GalleryFragment extends Fragment {
                 Fragment addPackage = new AddPackage();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addPackage).commit();
-
+                fragmentTransaction.addToBackStack("GalleryFragment");
 
 
             }
@@ -159,7 +159,7 @@ public class GalleryFragment extends Fragment {
                 parmetros.putInt("id", card.getId());
                 packageDetail.setArguments(parmetros);
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, packageDetail ).commit();
-
+                fragmentTransaction.addToBackStack("GalleryFragment");
 
 
             }

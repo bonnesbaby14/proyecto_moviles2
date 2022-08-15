@@ -432,7 +432,7 @@ public class DeliveryDetail extends Fragment {
                     for (int i = 0; i < jsonObjec2.length(); i++) {
                         JSONObject obj = jsonObjec2.getJSONObject(i);
 
-                        clientes.add(clienteSelected);
+
                         if(!obj.getString("nombre").equals(clienteSelected)) {
                             clientes.add(obj.getString("nombre"));
                         }

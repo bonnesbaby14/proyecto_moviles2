@@ -89,7 +89,7 @@ public class UsersFragment extends Fragment {
                 Fragment addUser = new AddUserFragment();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addUser).commit();
-
+                fragmentTransaction.addToBackStack("UsersFragment");
 
 
             }
@@ -155,7 +155,7 @@ public class UsersFragment extends Fragment {
                 parmetros.putInt("id", card.getId());
                 userDetail.setArguments(parmetros);
                 fragmentTransaction.replace(R.id.nav_host_fragment_content_main, userDetail ).commit();
-
+                fragmentTransaction.addToBackStack("UsersFragment");
 
 
             }
