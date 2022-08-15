@@ -86,9 +86,9 @@ public class UsersFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment addDelivery = new AddDelivery();
+                Fragment addUser = new AddUserFragment();
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addDelivery).commit();
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, addUser).commit();
 
 
 
@@ -146,15 +146,15 @@ public class UsersFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("gabo", "se cliqueo el " + card.getId());
-                Fragment deliveryDetail = new DeliveryDetail();
+                Fragment userDetail = new UserDetailFragment();
 
 
                 FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
 
                 Bundle parmetros = new Bundle();
                 parmetros.putInt("id", card.getId());
-                deliveryDetail.setArguments(parmetros);
-                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, deliveryDetail ).commit();
+                userDetail.setArguments(parmetros);
+                fragmentTransaction.replace(R.id.nav_host_fragment_content_main, userDetail ).commit();
 
 
 
@@ -170,13 +170,13 @@ public class UsersFragment extends Fragment {
         linearLayout.removeAllViews();
         linearLayout.removeAllViewsInLayout();
 
-        String url2 = "https://ventanilla.softwaredatab.com/api/gabo?query=" + query;
+        String url2 = "https://ventanilla.softwaredatab.com/api/usuariogabo?query=" + query;
         StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("entregas"));
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("usuarios"));
                     scrollView.removeAllViewsInLayout();
                     linearLayout.removeAllViewsInLayout();
                     for (int i = 0; i < jsonObjec2.length(); i++) {
@@ -184,7 +184,7 @@ public class UsersFragment extends Fragment {
 
 
 
-                        linearLayout.addView(cards(obj.getString("codigo"), obj.getString("cordenadas"), obj.getString("descripcion"), obj.getInt("identrega")));
+                        linearLayout.addView(cards(obj.getString("usuario"), obj.getString("password"), obj.getString("usuario"), obj.getInt("idusuario")));
 
                     }
                     scrollView.addView(linearLayout);
