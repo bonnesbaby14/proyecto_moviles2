@@ -8,10 +8,11 @@
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.33055555555555555" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout/fragment_add_customer.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_add_delivery.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_add_package.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/fragment_add_user.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_customer_detail.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_delivery_detail.xml" value="0.19270833333333334" />
+        <entry key="app/src/main/res/layout/fragment_delivery_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_entrega_detail.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />

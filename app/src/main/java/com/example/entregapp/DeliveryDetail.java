@@ -33,9 +33,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -45,11 +48,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +65,9 @@ public class DeliveryDetail extends Fragment {
     String fotoname;
     String fotonameaux;
     Bitmap bitmap;
+    String clienteSelected;
+    String paqueteSelected;
+
 
     public DeliveryDetail() {
 
@@ -73,7 +81,7 @@ public class DeliveryDetail extends Fragment {
         View view= inflater.inflate(R.layout.fragment_delivery_detail, container, false);
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        EditText code = view.findViewById(R.id.nombre);
+
         EditText cordenadas = view.findViewById(R.id.direcion);
         EditText decripcin = view.findViewById(R.id.Telefono);
         imagen = view.findViewById(R.id.imageTomar);
@@ -82,6 +90,15 @@ public class DeliveryDetail extends Fragment {
         Bundle datosRecuperados = getArguments();
         Button enviar = view.findViewById(R.id.enviar);
         Button eliminar = view.findViewById(R.id.eliminar);
+
+        Spinner clientessp=view.findViewById(R.id.cliente);
+        Spinner paquetessp=view.findViewById(R.id.paquete);
+        ArrayList<String> clientes;
+        ArrayList<String> paquetes;
+        clientes = new ArrayList<String>();
+        paquetes = new ArrayList<String>();
+
+
 
 
         eliminar.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +182,9 @@ public class DeliveryDetail extends Fragment {
 
                         Map<String, String> params = new HashMap<String, String>();
 
-                        params.put("codigo", code.getText().toString());
+
+                        params.put("cliente", clienteSelected);
+                        params.put("codigo", paqueteSelected);
                         params.put("foto", fotoname);
                         params.put("cordenadas", cordenadas.getText().toString());
                         params.put("descripcion", decripcin.getText().toString());
@@ -176,6 +195,7 @@ public class DeliveryDetail extends Fragment {
                 };
 
                 queue.add(request);
+
             }
         });
 
@@ -232,10 +252,14 @@ public class DeliveryDetail extends Fragment {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject jsonObjec2 = new JSONObject(jsonObject.getString("entrega"));
 
-                    code.setText(jsonObjec2.getString("codigo"));
+                    paqueteSelected=(jsonObjec2.getString("codigo"));
+                    clienteSelected=(jsonObjec2.getString("cliente"));
+
                     decripcin.setText(jsonObjec2.getString("descripcion"));
                     cordenadas.setText(jsonObjec2.getString("cordenadas"));
                     fotoname = jsonObjec2.getString("foto");
+                    getClinetes("",clientessp,clientes);
+                    getPaquetes("",paquetessp,paquetes);
 
                     File imgFile = new File("/storage/emulated/0/" + jsonObjec2.getString("foto"));
                     Log.d("gaboFOTO", "uriImagen " + "/storage/emulated/0/" + jsonObjec2.getString("foto"));
@@ -388,6 +412,120 @@ public class DeliveryDetail extends Fragment {
                 .setContentIntent(pendingIntent);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getContext());
         managerCompat.notify(1, builder.build());
+
+    }
+
+
+    public void getClinetes(String query, Spinner clientessp,ArrayList<String> clientes) {
+        Log.d("gaboF", "SE CARGO la info");
+
+
+        String url2 = "https://ventanilla.softwaredatab.com/api/cliente?query=" + query;
+        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("clientes"));
+                    clientes.clear();
+                    clientes.add(clienteSelected);
+                    for (int i = 0; i < jsonObjec2.length(); i++) {
+                        JSONObject obj = jsonObjec2.getJSONObject(i);
+
+                        clientes.add(clienteSelected);
+                        if(!obj.getString("nombre").equals(clienteSelected)) {
+                            clientes.add(obj.getString("nombre"));
+                        }
+
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,clientes);
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    clientessp.setAdapter(arrayAdapter);
+                    clientessp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            clienteSelected=adapterView.getItemAtPosition(i).toString();
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                    Log.d("gabo", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("gabo", "error en segunda peticion" + e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("gabo", error.toString());
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(postRequest2);
+
+
+    }
+    public void getPaquetes(String query, Spinner paquetessp,ArrayList<String> paquetes) {
+        Log.d("gaboF", "SE CARGO la info");
+
+
+        String url2 = "https://ventanilla.softwaredatab.com/api/paquete?query=" + query;
+        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("paquete"));
+                    paquetes.clear();
+                    paquetes.add(paqueteSelected);
+                    for (int i = 0; i < jsonObjec2.length(); i++) {
+                        JSONObject obj = jsonObjec2.getJSONObject(i);
+
+                        if(!obj.getString("codigo").equals(paqueteSelected)) {
+                            paquetes.add(obj.getString("codigo"));
+                        }
+
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,paquetes);
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    paquetessp.setAdapter(arrayAdapter);
+                    paquetessp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            paqueteSelected=adapterView.getItemAtPosition(i).toString();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                    Log.d("gabo", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("gabo", "error en segunda peticion" + e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("gabo", error.toString());
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(postRequest2);
+
 
     }
 }

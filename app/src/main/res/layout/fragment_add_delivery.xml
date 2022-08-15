@@ -27,11 +27,10 @@
         app:layout_constraintVertical_bias="0.028"></ImageButton>
 
     <EditText
-        android:id="@+id/nombre"
+        android:id="@+id/direcion"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Codigo paquete: "
-
+        android:hint="Cordenadas entrega: "
         android:textColor="#FFF"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +38,7 @@
         app:layout_constraintHorizontal_bias="0.737"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.358" />
+        app:layout_constraintVertical_bias="0.514" />
 
     <EditText
         android:id="@+id/Telefono"
@@ -54,35 +53,28 @@
         app:layout_constraintHorizontal_bias="0.737"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.475" />
+        app:layout_constraintVertical_bias="0.389" />
 
-    <EditText
-        android:id="@+id/direcion"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:hint="Cordenadas entrega: "
-        android:textColor="#FFF"
-        android:textSize="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Spinner
+        android:id="@+id/paquete"
+        android:layout_width="351dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.737"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.599" />
+        app:layout_constraintHorizontal_bias="0.75"
 
-    <Button
-        android:id="@+id/getcord"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:text="Obtener cordenadas"
-        android:textColor="#FFF"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.737"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.705" />
+        app:layout_constraintTop_toBottomOf="@+id/direcion" />
+
+    <Spinner
+        android:id="@+id/cliente"
+        android:layout_width="351dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/direcion" />
 
     <Button
         android:id="@+id/enviar"
@@ -96,13 +88,13 @@
         app:layout_constraintHorizontal_bias="0.737"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.827" />
+        app:layout_constraintVertical_bias="0.877" />
 
     <Button
-        android:id="@+id/eliminar"
+        android:id="@+id/getcord"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="Eliminar"
+        android:text="Obtener cordenadas"
         android:textColor="#FFF"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -110,7 +102,7 @@
         app:layout_constraintHorizontal_bias="0.737"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.934" />
+        app:layout_constraintVertical_bias="0.787" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

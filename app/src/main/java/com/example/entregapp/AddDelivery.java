@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaScannerConnection;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,22 +33,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +64,11 @@ public class AddDelivery extends Fragment {
     ImageButton imagen;
     String fotoname;
     Bitmap bitmap;
+
+    String clienteSelected;
+    String paqueteSelected;
+
+
 
     public AddDelivery() {
         // Required empty public constructor
@@ -66,12 +79,22 @@ public class AddDelivery extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view =inflater.inflate(R.layout.fragment_entrega_detail, container, false);
+        View view =inflater.inflate(R.layout.fragment_add_delivery, container, false);
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Spinner clientessp=view.findViewById(R.id.cliente);
+        Spinner paquetessp=view.findViewById(R.id.paquete);
+        ArrayList<String> clientes;
+        ArrayList<String> paquetes;
+        clientes = new ArrayList<String>();
+        paquetes = new ArrayList<String>();
+
+        getClinetes("",clientessp,clientes);
+        getPaquetes("",paquetessp,paquetes);
 
         EditText cordenadas = view.findViewById(R.id.direcion);
-        EditText codigo = view.findViewById(R.id.nombre);
+
         EditText descripcion = view.findViewById(R.id.Telefono);
+
 
         cordenadas.setEnabled(false);
 
@@ -120,7 +143,9 @@ public class AddDelivery extends Fragment {
 
                         Map<String, String> params = new HashMap<String, String>();
 
-                        params.put("codigo", codigo.getText().toString());
+                        params.put("cliente", clienteSelected);
+                        params.put("codigo", paqueteSelected);
+
                         params.put("foto", fotoname);
                         params.put("cordenadas", cordenadas.getText().toString());
                         params.put("descripcion", descripcion.getText().toString());
@@ -287,6 +312,116 @@ public class AddDelivery extends Fragment {
                 .setContentIntent(pendingIntent);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getContext());
         managerCompat.notify(1, builder.build());
+
+    }
+
+    public void getClinetes(String query, Spinner clientessp,ArrayList<String> clientes) {
+        Log.d("gaboF", "SE CARGO la info");
+
+
+        String url2 = "https://ventanilla.softwaredatab.com/api/cliente?query=" + query;
+        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("clientes"));
+                    clientes.clear();
+                    clientes.add("Selecciona cliente");
+                    for (int i = 0; i < jsonObjec2.length(); i++) {
+                        JSONObject obj = jsonObjec2.getJSONObject(i);
+
+                        clientes.add(obj.getString("nombre"));
+
+
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,clientes);
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    clientessp.setAdapter(arrayAdapter);
+                    clientessp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                         clienteSelected=adapterView.getItemAtPosition(i).toString();
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                    Log.d("gabo", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("gabo", "error en segunda peticion" + e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("gabo", error.toString());
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(postRequest2);
+
+
+    }
+    public void getPaquetes(String query, Spinner paquetessp,ArrayList<String> paquetes) {
+        Log.d("gaboF", "SE CARGO la info");
+
+
+        String url2 = "https://ventanilla.softwaredatab.com/api/paquete?query=" + query;
+        StringRequest postRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonObjec2 = new JSONArray(jsonObject.getString("paquete"));
+                    paquetes.clear();
+                    paquetes.add("Selecciona paquete");
+                    for (int i = 0; i < jsonObjec2.length(); i++) {
+                        JSONObject obj = jsonObjec2.getJSONObject(i);
+
+                        paquetes.add(obj.getString("codigo"));
+
+
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,paquetes);
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    paquetessp.setAdapter(arrayAdapter);
+                    paquetessp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            paqueteSelected=adapterView.getItemAtPosition(i).toString();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                    Log.d("gabo", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("gabo", "error en segunda peticion" + e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("gabo", error.toString());
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(postRequest2);
+
 
     }
 
