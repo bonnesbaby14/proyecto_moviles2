@@ -42,8 +42,8 @@ public class Login extends AppCompatActivity {
         TextView usertx = findViewById(R.id.usuario);
         TextView passwordtx = findViewById(R.id.password);
         Log.d("Warm", "uno");
-        // Intent intent = new Intent(Login.this, MainActivity.class);
-        //startActivity(intent);
+         Intent intent = new Intent(Login.this, Configuracion.class);
+        startActivity(intent);
 
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
 
