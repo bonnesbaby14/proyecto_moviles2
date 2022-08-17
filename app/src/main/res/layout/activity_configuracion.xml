@@ -9,62 +9,65 @@
 
     <TextView
         android:id="@+id/alama"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="272dp"
+        android:layout_height="71dp"
         android:text="Alarma de entrega"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.225"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.125" />
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="305dp"
+        android:layout_height="126dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:textSize="30sp"
+        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.452"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.379"
+        app:layout_constraintVertical_bias="0.351"
         tools:text="12:00" />
 
     <Button
         android:id="@+id/btnDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="305dp"
+        android:layout_height="64dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="cambiar hora"
-        android:textColor="@color/colorPrimaryDark"
+        android:text="Hora"
+        android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.452"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.645" />
+        app:layout_constraintVertical_bias="0.62" />
 
     <Button
         android:id="@+id/btnSetAlarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="298dp"
+        android:layout_height="63dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:text="Crear alarma"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/white"
         android:textSize="30sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
+        app:layout_constraintVertical_bias="0.773" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

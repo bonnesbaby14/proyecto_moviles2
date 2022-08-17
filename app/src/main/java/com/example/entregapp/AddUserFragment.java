@@ -49,7 +49,7 @@ public class AddUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_user, container, false);
 
 
-        EditText usuario = view.findViewById(R.id.usuario);
+        EditText usuario = view.findViewById(R.id.usuariovav);
         EditText password = view.findViewById(R.id.password);
 
 

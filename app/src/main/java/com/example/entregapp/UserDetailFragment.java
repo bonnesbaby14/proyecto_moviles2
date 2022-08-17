@@ -51,7 +51,7 @@ public class UserDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_user_detail, container, false);
-        EditText usuairo = view.findViewById(R.id.usuario);
+        EditText usuairo = view.findViewById(R.id.usuariovav);
         EditText paswword = view.findViewById(R.id.password);
 
         Bundle datosRecuperados = getArguments();

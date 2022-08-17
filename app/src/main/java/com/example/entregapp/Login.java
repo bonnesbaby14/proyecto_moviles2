@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,11 +40,16 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView usertx = findViewById(R.id.usuario);
+        TextView usertx = findViewById(R.id.usuariovav);
         TextView passwordtx = findViewById(R.id.password);
+
+
+
+
+
         Log.d("Warm", "uno");
-         Intent intent = new Intent(Login.this, Configuracion.class);
-        startActivity(intent);
+
+
 
         SharedPreferences preferences = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
 
@@ -53,6 +59,11 @@ public class Login extends AppCompatActivity {
         if(!user.equals("no existe")){
             usertx.setText(user);
             passwordtx.setText(password);
+            passwordtx.setEnabled(false);
+            usertx.setEnabled(false);
+
+
+
         }
 
 
@@ -98,9 +109,9 @@ public class Login extends AppCompatActivity {
         });
 
         final androidx.biometric.BiometricPrompt.PromptInfo promptInfo = new androidx.biometric.BiometricPrompt.PromptInfo.Builder()
-                .setTitle("login")
-                .setDescription("user login with finger")
-                .setNegativeButtonText("cancel")
+                .setTitle("Login")
+                .setDescription("Usar huella para iniciar session")
+                .setNegativeButtonText("Cancelar")
                 .build();
 
 

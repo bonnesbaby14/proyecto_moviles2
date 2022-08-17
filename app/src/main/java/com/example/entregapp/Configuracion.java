@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.util.Calendar;
 
@@ -44,7 +46,22 @@ public class Configuracion extends AppCompatActivity {
 
         crear=findViewById(R.id.btnSetAlarm);
         set=findViewById(R.id.btnDate);
-        AlarmManager alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
+        TextView time=findViewById(R.id.time);
+
+
+
+        SharedPreferences preferences = getSharedPreferences("alarma", Context.MODE_PRIVATE);
+
+        String hora = preferences.getString("hora", "00");
+        String minutos = preferences.getString("minutos", "00");
+
+        if(hora.equals(hora)){
+
+            finalHour=hora;
+            finalMinute=minutos;
+            time.setText(finalHour+":"+finalMinute);
+
+        }
 
 
         crear.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +76,7 @@ public class Configuracion extends AppCompatActivity {
                 assert alarmManager !=null;
                 Log.d("gaboF", "se setio ");
                 alarmManager.set(AlarmManager.RTC_WAKEUP, today.getTimeInMillis(), pendingIntent);
-
+                time.setText(finalHour+":"+finalMinute);
                 Toast.makeText(Configuracion.this, getString(R.string.changed_to, finalHour + ":" + finalMinute), Toast.LENGTH_LONG).show();
 
 
@@ -78,7 +95,7 @@ public class Configuracion extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(Configuracion.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String finalHour, finalMinute;
+
 
                         finalHour = "" + selectedHour;
                         finalMinute = "" + selectedMinute;
@@ -91,7 +108,11 @@ public class Configuracion extends AppCompatActivity {
                         today.set(Calendar.MINUTE, selectedMinute);
                         today.set(Calendar.SECOND, 0);
 
-
+                        SharedPreferences preferences=getSharedPreferences("alarma",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor=preferences.edit();
+                        editor.putString("hora",finalHour);
+                        editor.putString("minutos",finalMinute);
+                        editor.commit();
 
 
 
